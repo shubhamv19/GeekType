@@ -14,36 +14,40 @@ let timeleft = maxTime;
 let correctType = new Audio('type.mp3');
 let IncorrectType = new Audio('wrong.mp3');
 
-
-const playSound = () =>{
+const playSound = () => {
     correctType.pause();
     IncorrectType.pause();
-}
+};
 
-// soundBtn.addEventListener('click', ()=>{
-//     playSound();
-// })
-
-//define the loadPera function
 const loadPera = () => {
     let random_Pera = Math.floor(Math.random() * article.length);
-   type_content.innerHTML = "";
+    type_content.innerHTML = "";
     article[random_Pera].split('').forEach(element => {
         let realData = `<span>${element}</span>`;
         type_content.innerHTML += realData;
     });
 
-   type_content.querySelectorAll('span')[0].classList.add('active');
-    document.addEventListener('click', ()=>{
+    type_content.querySelectorAll('span')[0].classList.add('active');
+    document.addEventListener('click', () => {
         input.focus();
-    })
-    type_content.addEventListener('click', ()=>{
+    });
+    type_content.addEventListener('click', () => {
         input.focus();
-    })
-}
+    });
+};
+
+const showResults = () => {
+    const popup = document.createElement('div');
+    popup.className = 'popup';
+    popup.innerHTML = `
+        <h1>Time's Up!</h1>
+        <h2>${wpm.innerText}</h2>
+        <h2> ${cpm.innerText}</h2>
+    `;
+    document.body.appendChild(popup);
+};
 
 loadPera();
-
 
 input.addEventListener('input', (e) => {
     let char = type_content.querySelectorAll('span');
@@ -54,57 +58,63 @@ input.addEventListener('input', (e) => {
         isTyping = true;
     }
 
-    if (letterIndex < char.length - 1) {
-        if (inputValue == null) {
-            if(letterIndex > 0){
-                letterIndex--;
-                if(char[letterIndex].classList.contains('incorrect')){
-                    mistakes--
-                }
-                char[letterIndex].classList.remove('correct','incorrect');
+    if (e.inputType === 'deleteContentBackward' || e.inputType === 'deleteContentForward') {
+        if (letterIndex > 0) {
+            letterIndex--;
+            if (char[letterIndex].classList.contains('incorrect')) {
+                mistakes--;
             }
-        } else {
-            if (char[letterIndex].innerText == inputValue) {
-                char[letterIndex].classList.add('correct');
-                correctType.play();
-                // playSound();
-            } else {
-                char[letterIndex].classList.add('incorrect');
-                mistakes++;
-                IncorrectType.play();
-                // playSound();
-            }
+            char[letterIndex].classList.remove('correct', 'incorrect');
         }
-
-
-        letterIndex++;
-        char.forEach(element =>{
-            element.classList.remove('active');
-        })
-        char[letterIndex].classList.add('active');
-        error.innerText = `Mistakes : ${mistakes}`;
-        cpm.innerText = `CPM : ${letterIndex - mistakes}`;
     } else {
-        clearInterval(time);
-        input.value = "";
-    } 
+        if (letterIndex < char.length - 1) {
+            if (inputValue == null) {
+                if (letterIndex > 0) {
+                    letterIndex--;
+                    if (char[letterIndex].classList.contains('incorrect')) {
+                        mistakes--;
+                    }
+                    char[letterIndex].classList.remove('correct', 'incorrect');
+                }
+            } else {
+                if (char[letterIndex].innerText == inputValue) {
+                    char[letterIndex].classList.add('correct');
+                    correctType.play();
+                } else {
+                    char[letterIndex].classList.add('incorrect');
+                    mistakes++;
+                    IncorrectType.play();
+                }
+            }
 
+            letterIndex++;
+            char.forEach(element => {
+                element.classList.remove('active');
+            });
+            char[letterIndex].classList.add('active');
+            error.innerText = `Mistakes : ${mistakes}`;
+            cpm.innerText = `CPM : ${letterIndex - mistakes}`;
+        } else {
+            clearInterval(time);
+            input.value = '';
+        }
+    }
 });
 
-const timeSetup = () =>{
-    if(timeleft > 0){
+const timeSetup = () => {
+    if (timeleft > 0) {
         timeleft--;
         t_left.innerText = `Time-Left : ${timeleft}S`;
         let wpmTab = Math.round((letterIndex - mistakes) / 5 / (maxTime - timeleft) * 60);
         wpm.innerText = `WPM : ${wpmTab}`;
-    }else{
+    } else {
         clearInterval(time);
-        input.value = "";
+        input.value = '';
+        showResults();
     }
 };
 
-
-resetBtn.addEventListener('click', ()=>{
+resetBtn.addEventListener('click', () => {
     loadPera();
     clearInterval(time);
     wpm.innerText = `WPM : `;
@@ -112,6 +122,6 @@ resetBtn.addEventListener('click', ()=>{
     cpm.innerText = `CPM :`;
     timeleft = maxTime;
     t_left.innerText = `Time-Left : ${maxTime}S`;
-    input.value = "";
+    input.value = '';
     letterIndex = mistakes = isTyping = 0;
-})
+});
