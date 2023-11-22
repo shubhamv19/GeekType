@@ -1,4 +1,5 @@
 * {
+    color: #ddbe34;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -7,14 +8,13 @@
   body {
     width: 100%;
     height: 100vh;
-    background-image: linear-gradient(45deg, #7c7149 0%, #bddeeb 100%);
+    background-color: #37393a;
     place-items: center;
     display: grid;
   }
   .box {
     width: 70%;
     height: auto;
-    background-color: #fff;
     padding: 20px;
   }
   .box .top_part {
@@ -23,6 +23,7 @@
   }
 
   .h1{
+    color:#ddbe34;
     height: 10px;
     display: flexbox;
     align-items: center;
@@ -36,6 +37,7 @@
   }
   
   .title_part h2 {
+    color: #efe81b;
     font-size: 2rem;
     opacity: 0.6;
   }
@@ -91,9 +93,9 @@
       position: absolute;
       z-index: -999;
       opacity: 0;
-      /* top: 20px; */
   }
   .type_content p{
+      color: #969899;
       opacity: .7;
       font-size: 1.4rem;
       letter-spacing: 2px;word-spacing: 2px;
@@ -133,14 +135,14 @@
   }
   ::selection{
       background-color: rgb(255, 141, 141);
-      color: #fff;
+      color: #c57878;
   }
   
   .correct{
-    color: green;
+    color: rgb(248, 246, 246);
   }
   .incorrect{
-    color: red;
+    color: rgb(255, 3, 3);
   }
   .active{
     opacity: .6;
@@ -156,9 +158,5 @@
     background-color: rgba(0, 0, 0, 0.897);
     animation: blink .5s linear infinite;
   }
-  
-  @keyframes blink {
-    50%{
-      opacity: 1;
-    }
-  }
+
+   
